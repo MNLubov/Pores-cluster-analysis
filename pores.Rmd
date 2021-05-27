@@ -1,0 +1,58 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+
+```{r}
+library(factoextra)
+rm(list=ls())
+```
+```{r}
+getwd()
+df <- read.table("D://data/data_pores.csv", header = FALSE, sep = ";")
+```
+```{r}
+df
+```
+```{r}
+#convert and scaling
+df <- na.omit(df)
+df2<-data.matrix(df, rownames.force = NA)
+df2<-scale(df2)
+```
+
+
+```{r}
+k2 <- kmeans(df2, centers = 3, nstart = 25)
+str(k2)
+```
+```{r}
+#Cluster analysis
+res.km <- eclust(df2, "kmeans", nstart = 25)
+```
+```{r}
+#Optimal number of clusters
+fviz_gap_stat(res.km$gap_stat)
+```
+
+
+```{r}
+# Silhouette plot
+fviz_silhouette(res.km)
+```
+
+
+```{r}
+# Print result
+res.km
+```
+
+```{r}
+#Calculation of the enhanced hierarchical clustering
+res.hc <- eclust(df2, "hclust")
+
+#building dendrogram
+fviz_dend(res.hc, rect = TRUE)
+```
+
